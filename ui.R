@@ -1,8 +1,8 @@
 library(shiny)
-library(flexdashboard)
 library(shinydashboard)
 library(DT)
 library(dplyr)
+library(plotly)
 
 sales <- read.csv("steam-games-dataset/vgsales.csv")
 gameNames <- sales %>% arrange(desc(Critic_Score)) %>% select(Name) %>% head(500)
@@ -54,7 +54,9 @@ dashboardPage(
                   )
               ),
               column(width=6,
-                     flexdashboard::gaugeOutput("scoregauge")
+                  div(style = "margin-top:-100px;",
+                      plotlyOutput("scoregauge")
+                  )
               )
               
           ),
