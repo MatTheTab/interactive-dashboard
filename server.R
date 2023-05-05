@@ -1,13 +1,16 @@
 library(shiny)
 library(shinydashboard)
+library(flexdashboard)
 library(dplyr)
-library(ECharts2Shiny)
 
 #updateSelectizeInput(session, inputId="searchbar", choices=c("test", "test2"), server=F)
 
 shinyServer(
   function(input, output, session) {
-    renderGauge(div_id = "test", rate=99, gauge_name = "FinishRate")
-
+    output$scoregauge <- flexdashboard::renderGauge({
+      gauge(30, min = 0, max = 100, symbol = '%', label = paste("Critic score"), gaugeSectors(
+        success = c(100, 75), warning = c(74,40), danger = c(39, 0))
+      )
+    })
   }
 )

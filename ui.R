@@ -1,4 +1,5 @@
 library(shiny)
+library(flexdashboard)
 library(shinydashboard)
 library(DT)
 library(dplyr)
@@ -53,10 +54,7 @@ dashboardPage(
                   )
               ),
               column(width=6,
-                   loadEChartsLibrary(),
-                   
-                   tags$div(id="test", style="width:100%; height:100%;"),
-                   deliverChart(div_id = "test")  
+                     flexdashboard::gaugeOutput("scoregauge")
               )
               
           ),

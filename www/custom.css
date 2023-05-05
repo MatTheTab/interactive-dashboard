@@ -1,0 +1,72 @@
+body {
+  color:white;
+}
+
+h2 {
+  color: white;
+}
+
+.box .box-solid {
+  background:#666666;
+}
+
+.box.box-solid {
+border-bottom-color:#666666;
+border-left-color:#666666;
+border-right-color:#666666;
+border-top-color:#666666;
+}
+
+/* header logo */
+.main-header .logo {
+  font-family: "Segoe UI";
+  font-weight: bold;
+  font-size: 24px;
+  color: white;
+}
+
+/* header background */
+.skin-blue .main-header .logo {
+  background-color: #202224;
+}
+
+/* hover header logo */
+.skin-blue .main-header .logo:hover {
+  background-color: #202224;
+}
+
+/* navbar (rest of the header) */
+.skin-blue .main-header .navbar {
+  background-color: #202224 ;
+}
+
+/* main sidebar */
+.skin-blue .main-sidebar {
+  background-color: #24282f;
+}
+
+/* active selected tab in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
+  background-color: #323a4b;
+}
+
+/* other links in the sidebarmenu */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a{
+  background-color: #24282f;
+  color: #ffffff;
+}
+
+/* other links in the sidebarmenu when hovered */
+.skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
+  background-color: #323a4b;
+}
+
+/* toggle button when hovered  */
+.skin-blue .main-header .navbar .sidebar-toggle:hover{
+  background-color: #323a4b;
+}
+
+/* body */
+.content-wrapper {
+  background-color: #2c323b;
+}
