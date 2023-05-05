@@ -1,4 +1,5 @@
 # Game recommendation system
+Live demo: https://gho-ost.shinyapps.io/interactive-dashboard/
 
 ## Data:
 https://data.world/mhoangvslev/steam-games-dataset
