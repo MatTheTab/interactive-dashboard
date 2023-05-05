@@ -1,6 +1,12 @@
 library(shiny)
 library(shinydashboard)
 library(DT)
+library(dplyr)
+
+sales <- read.csv("steam-games-dataset/vgsales.csv")
+gameNames <- sales %>% arrange(desc(Critic_Score)) %>% select(Name) %>% head(500)
+gameGenres <- sales %>% filter(Genre != "") %>% select(Genre) %>% distinct()
+gameGenres <- rbind("All", gameGenres)
 
 prettyTable <- function(table_df, round_columns_func=is.numeric, round_digits=0) {
   DT::datatable(table_df, style="bootstrap", filter = "top", rownames = FALSE, extensions = "Buttons", 
@@ -9,70 +15,68 @@ prettyTable <- function(table_df, round_columns_func=is.numeric, round_digits=0)
 }
 
 dashboardPage(
-  dashboardHeader(title="Game recommendation system", titleWidth = 350),
+  dashboardHeader(title="Game recommendations", titleWidth = 310),
   
   dashboardSidebar(width = 130,
-                   sidebarMenu(
-                     menuItem("Dashboard", tabName="dashboard", icon = icon("gamepad")),
-                     menuItem("Help", tabName="help", icon = icon("circle-question", class="fa-solid")),
-                     menuItem("About", tabName="about", icon = icon("circle-info"))
-                   )),
+      sidebarMenu(
+        menuItem("Dashboard", tabName="dashboard", icon = icon("gamepad", style="color:#dddddd")),
+        menuItem("Help", tabName="help", icon = icon("circle-question", class="fa-solid", style="color:#dddddd")),
+        menuItem("About", tabName="about", icon = icon("circle-info", style="color:#dddddd"))
+      )
+  ),
   
   dashboardBody(
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
+    
     tabItems(
       tabItem(tabName="dashboard",
-             fluidRow(
-               box(
-                 title = "Box title", width = 6, status = "primary",
-                 "Box content"
-               ),
-               box(
-                 status = "warning", width = 6,
-                 "Box content"
-               )
-             ),
-             
-             fluidRow(
-               column(width = 4,
-                      box(
-                        title = "Title 1", width = NULL, solidHeader = TRUE, status = "primary",
-                        "Box content"
-                      ),
-                      box(
-                        width = NULL, background = "black",
-                        "A box with a solid black background"
+          fluidRow(
+              div(style = "margin-left:20px; margin-top:-20px",
+                  h2("Select a game")),
+              column(width=4,
+                  selectizeInput(
+                      width="100%",
+                      "searchbar",
+                      label = "Game",
+                      choices = gameNames,
+                      options = list(
+                        placeholder = 'Type the title', maxOptions = 17000)
                       )
-               ),
-               
-               column(width = 4,
-                      box(
-                        title = "Title 3", width = NULL, solidHeader = TRUE, status = "warning",
-                        "Box content"
-                      ),
-                      box(
-                        title = "Title 5", width = NULL, background = "light-blue",
-                        "A box with a solid light-blue background"
-                      )
-               ),
-               
-               column(width = 4,
-                      box(
-                        title = "Title 2", width = NULL, solidHeader = TRUE,
-                        "Box content"
-                      ),
-                      box(
-                        title = "Title 6", width = NULL, background = "maroon",
-                        "A box with a solid maroon background"
-                      )
-               )
+              ),
+              column(width=2,
+                  selectInput(
+                      width="100%",
+                      "genresearch",
+                      label = "Genre",
+                      choices = gameGenres,
+                  )
+              ),
+              column(width=6,
+                   loadEChartsLibrary(),
+                   
+                   tags$div(id="test", style="width:100%; height:100%;"),
+                   deliverChart(div_id = "test")  
+              )
+              
+          ),
+          
+          fluidRow(
+               div(img(src = "imgs/PP_logotyp_black.png", height=85,width=510))
              )
       
       ),
       tabItem(tabName="help",
-             h2("Help section")
+             h2("Help section"),
+             "Information about dashboard usage"
       ),
       tabItem(tabName="about",
-             h2("About section")
+             h2("About section"),
+             "Created by:", br(),
+             "Mateusz Tabaszewski 151945", br(),
+             "Barłomiej Pukacki 151942", br(),
+             "Data used:",
+             a("https://data.world/mhoangvslev/steam-games-dataset", href="https://data.world/mhoangvslev/steam-games-dataset")
       )
     )
   )
