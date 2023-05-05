@@ -1,3 +1,9 @@
+# Game recommendation system
+
+## Data:
+https://data.world/mhoangvslev/steam-games-dataset
+
+## Assignment:
 Create an interactive data analysis dashboard:
 
 - Select an application domain and source dataset(s)
