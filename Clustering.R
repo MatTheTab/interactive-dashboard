@@ -12,6 +12,9 @@ games<-read.csv("C:\\Users\\Komputer\\Downloads\\games-features.csv")
 #Deleting repeated names
 games <- games %>%
   distinct(QueryName, .keep_all = TRUE)
+#Possibly delete repeated names in ResponseNames too
+games <- games %>%
+  distinct(ResponseName, .keep_all = TRUE)
 
 #Selecting top games according to RecommendationCount
 games <- games %>%
@@ -70,6 +73,8 @@ normalize <- function(df) {
   return(df_norm)
 }
 
+# Similarity can be infinite if distance is 0, so we may need to 
+# safeguard against that
 
 similarity <- function(df, row1, row2) {
   row1_subset <- df[row1, ] %>% select_if(is.numeric)
@@ -103,3 +108,10 @@ similarity_only_genres <-function(df, row1, row2){
   
   return(1/sqrt(dist))
 }
+
+#################################TESTS_FOR_DISTANCES############################
+
+norm_games=normalize(games)
+norm_games <- norm_games %>% select(-QueryID) %>% select(-ResponseID)
+similarity(norm_games, 217, 447)
+similarity_only_genres(norm_games, 1, 3)
