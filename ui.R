@@ -1,18 +1,12 @@
 library(shiny)
 library(shinydashboard)
-library(DT)
 library(dplyr)
 library(plotly)
+library(DT)
 
-games <- read.csv("steam-games-dataset/game-features-cut.csv")
-gameNames <- games %>% arrange(desc(Metacritic)) %>% select(ResponseName)
+games <- read.csv("steam-games-dataset/clustered_games.csv")
+gameNames <- games %>% arrange(desc(Metacritic)) %>% select(QueryName)
 gameGenres = c("All","Indie","Action","Adventure","Casual","Strategy","RPG","Simulation","EarlyAccess","FreeToPlay","Sports","Racing","MassivelyMultiplayer")
-
-prettyTable <- function(table_df, round_columns_func=is.numeric, round_digits=0) {
-  DT::datatable(table_df, style="bootstrap", filter = "top", rownames = FALSE, extensions = "Buttons", 
-                options = list(dom = 'Bfrtip', buttons = c('copy', 'csv', 'excel', 'pdf', 'print'))) %>%
-    formatRound(unlist(lapply(table_df, round_columns_func)), round_digits)
-}
 
 dashboardPage(
   dashboardHeader(title="Game recommendations", titleWidth = 310),
@@ -40,29 +34,45 @@ dashboardPage(
                       "gamesearch",
                       label = "Game",
                       choices = gameNames,
-                      selected = NULL,
+                      selected = "Dota 2",
                       options = list(
                         placeholder = 'Type the title', maxOptions = 17000)
-                      )
-              ),
-              column(width=3,
+                      ),
                   selectInput(
-                      width="100%",
-                      "genresearch",
-                      label = "Genre",
-                      selected = "All",
-                      multiple=T,
-                      choices = gameGenres,
-                  )
-              ),
-              column(width=5,
-                  div(style = "margin-top:-30px;",
+                    width="100%",
+                    "genresearch",
+                    label = "Genre",
+                    selected = "All",
+                    multiple=T,
+                    choices = gameGenres,
+                  ),
+                  div(style = "margin-top:-20px; height:200px;",
                       plotlyOutput("scoregauge")
                   )
+              ),
+              column(width=7, offset=1,
+                     htmlOutput("headerimage")
+                  
               )
-              
           ),
-          
+          fluidRow(
+              column(width=7,
+                  plotlyOutput("scatter")
+                     
+              ),
+              column(width=5,
+                  h3("Games you might like:"),
+                  DT::dataTableOutput("cluster_games_table")
+              )
+          ),
+          fluidRow(
+              column(width=6,
+                  plotOutput("bar")
+              ),
+              column(width=6,
+                  plotOutput("density")
+              )
+          ),
           fluidRow(
                div(style = "margin-left:10px;",
                      img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
@@ -75,10 +85,11 @@ dashboardPage(
       ),
       tabItem(tabName="about",
              h2("About section"),
-             "Created by:", br(),
+             
+             h4("Created by:"),
              "Mateusz Tabaszewski 151945", br(),
              "Barłomiej Pukacki 151942", br(),
-             "Data used:", br(),
+             h4("Data used:"),
              a("https://data.world/craigkelly/steam-game-data", href="https://data.world/craigkelly/steam-game-data")
       )
     )
