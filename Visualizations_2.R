@@ -32,7 +32,73 @@ ggplot(similar_games, aes(x = Metacritic)) +
   annotate("text", x=game_score+5, y=0.022, label=chosen_game, angle=90,
            hjust=-0.2, size=4) +
   xlim(0,100)
-  
+
+
+
+
+###### 
+title_size <- 20
+label_size <- 16
+tick_size <- 12
+grid_size <- 0.5
+
+# Gradient
+score_density <- density(games$Metacritic, n = 2^12, kernel="gaussian", bw="nrd0", window = "gaussian")
+similar_scores_density <- data.frame(x=score_density$x, y=score_density$y)
+similar_scores_density %>% ggplot(aes(x, y)) + 
+  geom_line() + 
+  geom_segment(aes(xend=x, yend=0, colour=x)) + # alpha=0.2
+  scale_color_gradient2(low = "#FF0000", mid="#FFCC33", high = "#66CC33", midpoint=60) +
+  ggtitle("Density distribution of metacritic scores of similar games") + 
+  geom_vline(aes(xintercept = game_score), color = "white", size=1) +
+  annotate("text", x=game_score+5, y=0.022, label=chosen_game, angle=90, color="white", hjust=0, size=4) +
+  xlim(0,100) +
+  labs(x = "Metacritic score", color = "Score") +
+  theme(plot.background = element_rect(fill="#2c323b"),
+        plot.title=element_text(size=title_size, colour = "white", hjust=0.4),
+        axis.title.x = element_text(size=label_size, colour = "white"),
+        axis.title.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill="#2c323b"),
+        legend.background = element_rect(fill="#2c323b"),
+        legend.text = element_text(size=tick_size, color ="white"),
+        legend.title = element_text(size=label_size, color = "white"),
+        legend.key = element_rect(fill="#2c323b"))
+
+score_density <- density(games$Metacritic, n = 2^12, kernel="gaussian", bw="nrd0", window = "gaussian")
+similar_scores_density <- data.frame(x=score_density$x, y=score_density$y)
+
+# Breaks
+similar_scores_density %>% ggplot(aes(x, y)) + 
+  geom_line(color="white") + 
+  geom_segment(aes(xend=x, yend=0, colour=x)) + # alpha=0.2
+  scale_color_stepsn(colors=c(
+    "#FF0000", 
+    "#FFCC33", 
+    "#66CC33"), 
+    breaks=c(50, 75))  +
+  ggtitle("Density distribution of metacritic scores of similar games") + 
+  geom_vline(aes(xintercept = game_score), color = "white", size=1) +
+  annotate("text", x=game_score+5, y=0.022, label=chosen_game, angle=90, color="white", hjust=0, size=4) +
+  xlim(0,100) +
+  labs(x = "Metacritic score", color = "Score") +
+  theme(plot.background = element_rect(fill="#2c323b"),
+        plot.title=element_text(size=title_size, colour = "white", hjust=0.4),
+        axis.title.x = element_text(size=label_size, colour = "white"),
+        axis.title.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill="#2c323b"),
+        legend.background = element_rect(fill="#2c323b"),
+        legend.text = element_text(size=tick_size, color ="white"),
+        legend.title = element_text(size=label_size, color = "white"),
+        legend.key = element_rect(fill="#2c323b"))
+
 
 #################Bar plot for distribution of genres############################
 

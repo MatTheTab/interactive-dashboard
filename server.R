@@ -30,7 +30,8 @@ findscore <- function(gamename){
 findimage <- function(gamename){
   games[games$QueryName==gamename,]$HeaderImage
 }
-paste('<img src="',findimage("Counter-Strike: Global Offensive"),'">', sep='', collapse=NULL)
+
+# paste('<img src="',findimage("Counter-Strike: Global Offensive"),'">', sep='', collapse=NULL)
 
 
 findchoices <- function(genres){
@@ -144,13 +145,26 @@ shinyServer(
       similar_games <- games %>% filter(cluster == cluster_value)
       similar_games <- similar_games %>% filter(QueryName != selected$game)
       
+      title_size <- 20
+      label_size <- 16
+      tick_size <- 12
+      grid_size <- 0.5
+      
       p <- ggplot(head(similar_games,number_of_points), aes(x = RecommendationCount, y = Metacritic,
                                                             text = paste("Title:", QueryName))) +
-        geom_point() +
+        geom_point(color="white") +
         labs(x = "RecommendationCount", y = "MetacriticScore") +
-        ggtitle("Quality vs Popularity for Similar Games")
+        ggtitle("Quality vs Popularity for Similar Games") +
+        theme(plot.background = element_rect(fill="#2c323b"),
+              plot.title=element_text(size=title_size-1, colour = "white", hjust = 0),
+              axis.title.x = element_text(size=label_size, colour = "white"),
+              axis.title.y = element_text(size=label_size, colour = "white"),
+              axis.text = element_text(size=tick_size, color = "white"),
+              panel.background = element_rect(fill="#2c323b"))
       
+      p
       fig <- ggplotly(p)
+      
       fig
     })
     
@@ -171,24 +185,41 @@ shinyServer(
                                                                             chosen_game_row, i))
       similar_games <- similar_games %>% filter(QueryName != selected$game)
       similar_games <- similar_games %>% top_n(number_of_bars, similarity)
+      
       second_largest <- sort(similar_games$similarity[similar_games$similarity != Inf],
-                             decreasing = TRUE)[2]
+                             decreasing = TRUE)[1]
       
       # Replace Inf values with the second largest non-Inf value times 2
       similar_games$similarity[similar_games$similarity == Inf] <- second_largest * 2
       
+      if(is.na(similar_games$similarity[1])){
+        similar_games$similarity<-1
+      }
       
       x_breaks <- seq(floor(min(similar_games$similarity)),
                       ceiling(max(similar_games$similarity)), length.out = 5)
       
       # Create a horizontal bar plot
+      title_size <- 20
+      label_size <- 16
+      tick_size <- 12
+      grid_size <- 0.5
+      
       g <- ggplot(head(similar_games,number_of_bars),
                   aes(x = similarity, y = reorder(QueryName, similarity))) +
-        geom_bar(stat = "identity") +
+        geom_bar(stat = "identity", fill="#66c0f4") +
         scale_x_continuous(breaks = x_breaks) +
         labs(x = "Similarity", y = "Game Name") +
-        ggtitle("Most Similar Games")
+        ggtitle("15 Most Similar Games") +
+        theme(plot.background = element_rect(fill="#2c323b"),
+              plot.title=element_text(size=title_size, colour = "white", hjust = 0),
+              axis.title.x = element_text(size=label_size, colour = "white", hjust=0.2),
+              axis.title.y = element_text(size=label_size, colour = "white"),
+              axis.text = element_text(size=tick_size, color = "white"),
+              panel.grid = element_line(color="#DDDDDD"),
+              panel.background = element_rect(fill="#2c323b"))
       g
+      
     })
     
     output$density <- renderPlot({
@@ -200,17 +231,33 @@ shinyServer(
         filter(QueryName == selected$game) %>%
         pull(Metacritic)
       
-      ggplot(similar_games, aes(x = Metacritic)) +
-        stat_density(geom = "line", color = "black", linewidth = 1) +
-        stat_density(geom = "area", alpha = .3, fill = "black") +
-        scale_fill_gradient2(low = "red", mid = "yellow", high = "green", midpoint = 70) +
-        scale_color_gradient2(low = "red", mid = "yellow", high = "green", midpoint = 70) +
-        labs(title = "Distribution of Metascores for Recommended Games", x = "Metascore",
-             y = "Density") + 
-        geom_vline(aes(xintercept = game_score), color = "red") +
-        annotate("text", x=game_score+5, y=0.022, label=selected$game, angle=90,
-                 hjust=-0.2, size=4) +
-        xlim(0,100)
+      title_size <- 20
+      label_size <- 16
+      tick_size <- 12
+      grid_size <- 0.5
+      
+      score_density <- density(similar_games$Metacritic, n = 2^12, kernel="gaussian", bw="nrd0", window = "gaussian")
+      similar_scores_density <- data.frame(x=score_density$x, y=score_density$y)
+      
+      similar_scores_density %>% ggplot(aes(x, y)) + 
+        geom_line() + 
+        geom_segment(aes(xend=x, yend=0, colour=x)) +
+        scale_color_stepsn(colors=c("#FF0000", "#FFCC33", "#66CC33"), breaks=c(50, 75))  +
+        ggtitle("Density distribution of scores of similar games") + 
+        geom_vline(aes(xintercept = game_score), color = "white", size=1) +
+        annotate("text", x=game_score+5, y=0.022, label=selected$game, angle=90, color="white", hjust=0, size=4) +
+        xlim(0,100) +
+        labs(x = "Metacritic score", color = "Score") +
+        theme(plot.background = element_rect(fill="#2c323b"),
+              plot.title=element_text(size=title_size, colour = "white", hjust=0.4),
+              axis.title.x = element_text(size=label_size, colour = "white"),
+              axis.title.y = element_blank(),
+              axis.text.x = element_text(size=tick_size, color = "white"),
+              axis.text.y = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.grid.major = element_blank(),
+              panel.background = element_rect(fill="#2c323b"),
+              legend.position = "none")
     })
     
   }

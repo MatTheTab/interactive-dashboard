@@ -57,12 +57,25 @@ cluster_value <- games %>% filter(QueryName == chosen_game) %>% pull(cluster)
 similar_games <- games %>% filter(cluster == cluster_value)
 similar_games <- similar_games %>% filter(QueryName != chosen_game)
 
+
+title_size <- 20
+label_size <- 16
+tick_size <- 12
+grid_size <- 0.5
+
 p <- ggplot(head(similar_games,number_of_points), aes(x = RecommendationCount, y = Metacritic,
                        text = paste("Title:", QueryName))) +
-  geom_point() +
+  geom_point(color="white") +
   labs(x = "RecommendationCount", y = "MetacriticScore") +
-  ggtitle("Quality vs Popularity for Similar Games")
-
+  ggtitle("Quality vs Popularity for Similar Games") +
+  theme(plot.background = element_rect(fill="#2c323b"),
+        plot.title=element_text(size=title_size-1, colour = "white", hjust = 0),
+        axis.title.x = element_text(size=label_size, colour = "white"),
+        axis.title.y = element_text(size=label_size, colour = "white"),
+        axis.text = element_text(size=tick_size, color = "white"),
+        panel.background = element_rect(fill="#2c323b"))
+  
+p
 fig <- ggplotly(p)
 
 fig
@@ -144,6 +157,27 @@ g <- ggplot(head(similar_games,number_of_bars),
   geom_bar(stat = "identity") +
   scale_x_continuous(breaks = x_breaks) +
   labs(x = "Similarity", y = "Game Name") +
-  ggtitle("Most Similar Games")
+  ggtitle("Most Similar Games") 
+
+
+#########
+title_size <- 20
+label_size <- 16
+tick_size <- 12
+grid_size <- 0.5
+
+g <- ggplot(head(similar_games,number_of_bars),
+            aes(x = similarity, y = reorder(QueryName, similarity))) +
+  geom_bar(stat = "identity", fill="#66c0f4") +
+  scale_x_continuous(breaks = x_breaks) +
+  labs(x = "Similarity", y = "Game Name") +
+  ggtitle("15 Most Similar Games") +
+  theme(plot.background = element_rect(fill="#2c323b"),
+        plot.title=element_text(size=title_size, colour = "white", hjust = 0.2),
+        axis.title.x = element_text(size=label_size, colour = "white", hjust=0.2),
+        axis.title.y = element_text(size=label_size, colour = "white"),
+        axis.text = element_text(size=tick_size, color = "white"),
+        panel.grid = element_line(color="#DDDDDD"),
+        panel.background = element_rect(fill="#2c323b"))
 g
 
