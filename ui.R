@@ -2,6 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(dplyr)
 library(plotly)
+library(DT)
 
 games <- read.csv("steam-games-dataset/clustered_games.csv")
 gameNames <- games %>% arrange(desc(Metacritic)) %>% select(ResponseName)
@@ -33,7 +34,7 @@ dashboardPage(
                       "gamesearch",
                       label = "Game",
                       choices = gameNames,
-                      selected = NULL,
+                      selected = "Dota 2",
                       options = list(
                         placeholder = 'Type the title', maxOptions = 17000)
                       )
@@ -56,15 +57,20 @@ dashboardPage(
               
           ),
           fluidRow(
-              column(width=6,
-                         h3("Games you might like:"),
-                         DT::dataTableOutput("cluster_games_table")
+              column(width=7,
+                  plotlyOutput("scatter")
                      
               ),
-              column(width=6
+              column(width=5,
+                  h3("Games you might like:"),
+                  DT::dataTableOutput("cluster_games_table")
               )
           ),
-          
+          # fluidRow(
+          #     column(width=7,
+          #         plotOutput("bar")
+          #     )
+          # ),
           fluidRow(
                div(style = "margin-left:10px;",
                      img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
