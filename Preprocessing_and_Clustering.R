@@ -64,6 +64,9 @@ set.seed(23)
 km_result <- kmeans(combined_df, centers = 10, nstart = 10)
 
 #Final Solution
-games$cluster <- km_result$cluster
+new_games$cluster <- km_result$cluster
+games <- left_join(games, new_games %>% select(QueryName, cluster), by = "QueryName")
+games <- games %>% filter(QueryName %in% new_games$QueryName)
 
-write.csv(games, "C:\\Users\Komputer\\interactive-dashboard\\steam-games-dataset\\clustered_games.csv")
+write.csv(games, "C:\\Users\\Komputer\\interactive-dashboard\\steam-games-dataset\\clustered_games.csv")
+
