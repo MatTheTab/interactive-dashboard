@@ -171,9 +171,9 @@ g <- ggplot(head(similar_games,number_of_bars),
   geom_bar(stat = "identity", fill="#66c0f4") +
   scale_x_continuous(breaks = x_breaks) +
   labs(x = "Similarity", y = "Game Name") +
-  ggtitle("Most Similar Games") +
+  ggtitle("15 Most Similar Games") +
   theme(plot.background = element_rect(fill="#2c323b"),
-        plot.title=element_text(size=title_size, colour = "white", hjust = 4),
+        plot.title=element_text(size=title_size, colour = "white", hjust = 0.2),
         axis.title.x = element_text(size=label_size, colour = "white", hjust=0.2),
         axis.title.y = element_text(size=label_size, colour = "white"),
         axis.text = element_text(size=tick_size, color = "white"),
