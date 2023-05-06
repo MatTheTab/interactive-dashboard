@@ -1,18 +1,55 @@
+###################################################### Libraries
+
 library(shiny)
 library(shinydashboard)
 library(dplyr)
 library(plotly)
 
-#updateSelectizeInput(session, inputId="searchbar", choices=c("test", "test2"), server=F)
+###################################################### DATA
+
+games <- read.csv("steam-games-dataset/game-features-cut.csv")
+games$GenreIsAll = "True"
+
+###################################################### FUNCTIONS
+
+findscore <- function(gamename){
+  games[games$ResponseName==gamename,]$Metacritic
+}
+
+# findscore("Dota 2"))
+
+findchoices <- function(genres){
+  filteredGames <- games
+  for (genre in genres){
+    colName <- paste("GenreIs", genre, sep="")
+    filteredGames <- filteredGames %>% filter(get(colName)=="True")
+  }
+  
+  filteredGames %>% select(ResponseName)
+}
+
+# findchoices(c("Action", "Adventure", "Indie", "FreeToPlay"))
+
+###################################################### SERVER
 
 shinyServer(
   function(input, output, session) {
+    selected <- reactiveValues(game=NULL, genres="All")
+    
+    observeEvent(input$gamesearch, {
+      selected$game = input$gamesearch
+    })
+    
+    observeEvent(input$genresearch, {
+      selected$genres = input$genresearch 
+      updateSelectizeInput(session, inputId="gamesearch", choices=findchoices(selected$genres))
+    })
     
     output$scoregauge <- renderPlotly({
       fig <- plot_ly(
         type = "indicator",
         mode = "gauge+number",
-        value = 85,
+        value = findscore(selected$game),
         title = list(text = "Critic score", font = list(size = 22, color="#dddddd")),
         gauge = list(
           axis = list(
@@ -26,7 +63,7 @@ shinyServer(
             ),
           bar = list(color = "white", thickness=0.2),
           threshold = list(
-            value=85,
+            value=findscore(selected$game),
             thickness=1,
             line = list(width=3, color="white")),
           bgcolor = "#cccccc",
