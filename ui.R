@@ -54,7 +54,7 @@ dashboardPage(
                   )
               ),
               column(width=6,
-                  div(style = "margin-top:-10px;",
+                  div(style = "margin-top:-30px;",
                       plotlyOutput("scoregauge")
                   )
               )
@@ -62,7 +62,8 @@ dashboardPage(
           ),
           
           fluidRow(
-               div(img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
+               div(style = "margin-left:10px;",
+                     img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
              )
       
       ),
