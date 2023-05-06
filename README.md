@@ -2,7 +2,7 @@
 Live demo: https://gho-ost.shinyapps.io/interactive-dashboard/
 
 ## Data:
-https://data.world/mhoangvslev/steam-games-dataset
+https://data.world/craigkelly/steam-game-data
 
 ## Assignment:
 Create an interactive data analysis dashboard:
