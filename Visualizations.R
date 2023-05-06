@@ -7,7 +7,7 @@ games <- read.csv("C:\\Users\\Komputer\\interactive-dashboard\\steam-games-datas
 games$X.1<-NULL
 games$X<-NULL
 # Setting the game manually for testing purposes
-chosen_game="Terraria"
+chosen_game="Counter-Strike: Global Offensive"
 
 normalize <- function(df) {
   df_norm <- df
@@ -91,6 +91,9 @@ second_largest <- sort(similar_games$similarity[similar_games$similarity != Inf]
 # Replace Inf values with the second largest non-Inf value times 2
 similar_games$similarity[similar_games$similarity == Inf] <- second_largest * 2
 
+if(is.na(similar_games$similarity[1])){
+  similar_games$similarity<-1
+}
 
 x_breaks <- seq(floor(min(similar_games$similarity)),
                 ceiling(max(similar_games$similarity)), length.out = 5)
@@ -121,12 +124,16 @@ similar_games$similarity <- sapply(1:nrow(norm_similar_games),
                                                           chosen_game_row, i))
 similar_games <- similar_games %>% filter(QueryName != chosen_game)
 similar_games <- similar_games %>% top_n(number_of_bars, similarity)
+
 second_largest <- sort(similar_games$similarity[similar_games$similarity != Inf],
-                       decreasing = TRUE)[2]
+                       decreasing = TRUE)[1]
 
 # Replace Inf values with the second largest non-Inf value times 2
 similar_games$similarity[similar_games$similarity == Inf] <- second_largest * 2
 
+if(is.na(similar_games$similarity[1])){
+  similar_games$similarity<-1
+}
 
 x_breaks <- seq(floor(min(similar_games$similarity)),
                 ceiling(max(similar_games$similarity)), length.out = 5)
@@ -139,3 +146,4 @@ g <- ggplot(head(similar_games,number_of_bars),
   labs(x = "Similarity", y = "Game Name") +
   ggtitle("Most Similar Games")
 g
+
