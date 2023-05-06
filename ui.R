@@ -34,7 +34,7 @@ dashboardPage(
                       "gamesearch",
                       label = "Game",
                       choices = gameNames,
-                      selected = "Dota 2",
+                      selected = "Counter-Strike: Global Offensive",
                       options = list(
                         placeholder = 'Type the title', maxOptions = 17000)
                       ),

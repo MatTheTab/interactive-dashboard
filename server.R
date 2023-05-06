@@ -245,7 +245,7 @@ shinyServer(
         scale_color_stepsn(colors=c("#FF0000", "#FFCC33", "#66CC33"), breaks=c(50, 75))  +
         ggtitle("Density distribution of scores of similar games") + 
         geom_vline(aes(xintercept = game_score), color = "white", size=1) +
-        annotate("text", x=game_score+5, y=0.022, label=chosen_game, angle=90, color="white", hjust=0, size=4) +
+        annotate("text", x=game_score+5, y=0.022, label=selected$game, angle=90, color="white", hjust=0, size=4) +
         xlim(0,100) +
         labs(x = "Metacritic score", color = "Score") +
         theme(plot.background = element_rect(fill="#2c323b"),
