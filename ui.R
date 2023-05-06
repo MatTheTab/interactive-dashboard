@@ -5,7 +5,7 @@ library(plotly)
 library(DT)
 
 games <- read.csv("steam-games-dataset/clustered_games.csv")
-gameNames <- games %>% arrange(desc(Metacritic)) %>% select(ResponseName)
+gameNames <- games %>% arrange(desc(Metacritic)) %>% select(QueryName)
 gameGenres = c("All","Indie","Action","Adventure","Casual","Strategy","RPG","Simulation","EarlyAccess","FreeToPlay","Sports","Racing","MassivelyMultiplayer")
 
 dashboardPage(
@@ -66,11 +66,11 @@ dashboardPage(
                   DT::dataTableOutput("cluster_games_table")
               )
           ),
-          # fluidRow(
-          #     column(width=7,
-          #         plotOutput("bar")
-          #     )
-          # ),
+          fluidRow(
+              column(width=7,
+                  plotOutput("bar")
+              )
+          ),
           fluidRow(
                div(style = "margin-left:10px;",
                      img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
