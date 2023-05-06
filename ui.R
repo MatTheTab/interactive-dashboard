@@ -54,7 +54,7 @@ dashboardPage(
                   )
               ),
               column(width=6,
-                  div(style = "margin-top:-100px;",
+                  div(style = "margin-top:-10px;",
                       plotlyOutput("scoregauge")
                   )
               )
@@ -62,7 +62,7 @@ dashboardPage(
           ),
           
           fluidRow(
-               div(img(src = "imgs/PP_logotyp_black.png", height=85,width=510))
+               div(img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
              )
       
       ),
@@ -75,8 +75,9 @@ dashboardPage(
              "Created by:", br(),
              "Mateusz Tabaszewski 151945", br(),
              "Barłomiej Pukacki 151942", br(),
-             "Data used:",
-             a("https://data.world/mhoangvslev/steam-games-dataset", href="https://data.world/mhoangvslev/steam-games-dataset")
+             "Data used:", br(),
+             a("https://data.world/mhoangvslev/steam-games-dataset", href="https://data.world/mhoangvslev/steam-games-dataset"), br(),
+             a("https://data.world/craigkelly/steam-game-data", href="https://data.world/craigkelly/steam-game-data")
       )
     )
   )
