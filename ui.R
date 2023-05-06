@@ -37,24 +37,23 @@ dashboardPage(
                       selected = "Dota 2",
                       options = list(
                         placeholder = 'Type the title', maxOptions = 17000)
-                      )
-              ),
-              column(width=3,
+                      ),
                   selectInput(
-                      width="100%",
-                      "genresearch",
-                      label = "Genre",
-                      selected = "All",
-                      multiple=T,
-                      choices = gameGenres,
-                  )
-              ),
-              column(width=5,
+                    width="100%",
+                    "genresearch",
+                    label = "Genre",
+                    selected = "All",
+                    multiple=T,
+                    choices = gameGenres,
+                  ),
                   div(style = "margin-top:-20px; height:200px;",
                       plotlyOutput("scoregauge")
                   )
+              ),
+              column(width=7, offset=1,
+                     htmlOutput("headerimage")
+                  
               )
-              
           ),
           fluidRow(
               column(width=7,
@@ -67,8 +66,11 @@ dashboardPage(
               )
           ),
           fluidRow(
-              column(width=7,
+              column(width=6,
                   plotOutput("bar")
+              ),
+              column(width=6,
+                  plotOutput("density")
               )
           ),
           fluidRow(

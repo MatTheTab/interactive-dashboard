@@ -27,6 +27,12 @@ findscore <- function(gamename){
 
 # findscore("Dota 2"))
 
+findimage <- function(gamename){
+  games[games$QueryName==gamename,]$HeaderImage
+}
+paste('<img src="',findimage("Counter-Strike: Global Offensive"),'">', sep='', collapse=NULL)
+
+
 findchoices <- function(genres){
   filteredGames <- games
   for (genre in genres){
@@ -107,9 +113,9 @@ shinyServer(
           bgcolor = "#cccccc",
           borderwidth = 0,
           steps = list(
-            list(range = c(0, 40), color = "#FF0000"),
-            list(range = c(41, 79), color="#FFCC33"),
-            list(range = c(80, 100), color = "#66CC33"))
+            list(range = c(0, 50), color = "#FF0000"),
+            list(range = c(51, 75), color="#FFCC33"),
+            list(range = c(76, 100), color = "#66CC33"))
           )
         )
       
@@ -121,6 +127,10 @@ shinyServer(
         )
       
       fig
+    })
+    
+    output$headerimage <- renderText({
+        paste('<img src="',findimage(selected$game),'">', sep="")
     })
     
     output$cluster_games_table <- DT::renderDataTable({
@@ -179,6 +189,28 @@ shinyServer(
         labs(x = "Similarity", y = "Game Name") +
         ggtitle("Most Similar Games")
       g
+    })
+    
+    output$density <- renderPlot({
+      cluster_value <- games %>% filter(QueryName == selected$game) %>% pull(cluster)
+      similar_games <- games %>% filter(cluster == cluster_value)
+      similar_games <- similar_games %>% filter(QueryName != selected$game)
+      
+      game_score <- games %>%
+        filter(QueryName == selected$game) %>%
+        pull(Metacritic)
+      
+      ggplot(similar_games, aes(x = Metacritic)) +
+        stat_density(geom = "line", color = "black", linewidth = 1) +
+        stat_density(geom = "area", alpha = .3, fill = "black") +
+        scale_fill_gradient2(low = "red", mid = "yellow", high = "green", midpoint = 70) +
+        scale_color_gradient2(low = "red", mid = "yellow", high = "green", midpoint = 70) +
+        labs(title = "Distribution of Metascores for Recommended Games", x = "Metascore",
+             y = "Density") + 
+        geom_vline(aes(xintercept = game_score), color = "red") +
+        annotate("text", x=game_score+5, y=0.022, label=selected$game, angle=90,
+                 hjust=-0.2, size=4) +
+        xlim(0,100)
     })
     
   }
