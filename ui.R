@@ -4,10 +4,9 @@ library(DT)
 library(dplyr)
 library(plotly)
 
-sales <- read.csv("steam-games-dataset/vgsales.csv")
-gameNames <- sales %>% arrange(desc(Critic_Score)) %>% select(Name) %>% head(500)
-gameGenres <- sales %>% filter(Genre != "") %>% select(Genre) %>% distinct()
-gameGenres <- rbind("All", gameGenres)
+games <- read.csv("steam-games-dataset/game-features-cut.csv")
+gameNames <- games %>% arrange(desc(Metacritic)) %>% select(ResponseName)
+gameGenres = c("All","Indie","Action","Adventure","Casual","Strategy","RPG","Simulation","EarlyAccess","FreeToPlay","Sports","Racing","MassivelyMultiplayer")
 
 prettyTable <- function(table_df, round_columns_func=is.numeric, round_digits=0) {
   DT::datatable(table_df, style="bootstrap", filter = "top", rownames = FALSE, extensions = "Buttons", 
@@ -38,23 +37,26 @@ dashboardPage(
               column(width=4,
                   selectizeInput(
                       width="100%",
-                      "searchbar",
+                      "gamesearch",
                       label = "Game",
                       choices = gameNames,
+                      selected = NULL,
                       options = list(
                         placeholder = 'Type the title', maxOptions = 17000)
                       )
               ),
-              column(width=2,
+              column(width=3,
                   selectInput(
                       width="100%",
                       "genresearch",
                       label = "Genre",
+                      selected = "All",
+                      multiple=T,
                       choices = gameGenres,
                   )
               ),
-              column(width=6,
-                  div(style = "margin-top:-10px;",
+              column(width=5,
+                  div(style = "margin-top:-30px;",
                       plotlyOutput("scoregauge")
                   )
               )
@@ -62,7 +64,8 @@ dashboardPage(
           ),
           
           fluidRow(
-               div(img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
+               div(style = "margin-left:10px;",
+                     img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
              )
       
       ),
@@ -76,7 +79,6 @@ dashboardPage(
              "Mateusz Tabaszewski 151945", br(),
              "Barłomiej Pukacki 151942", br(),
              "Data used:", br(),
-             a("https://data.world/mhoangvslev/steam-games-dataset", href="https://data.world/mhoangvslev/steam-games-dataset"), br(),
              a("https://data.world/craigkelly/steam-game-data", href="https://data.world/craigkelly/steam-game-data")
       )
     )
