@@ -1,18 +1,11 @@
 library(shiny)
 library(shinydashboard)
-library(DT)
 library(dplyr)
 library(plotly)
 
-games <- read.csv("steam-games-dataset/game-features-cut.csv")
+games <- read.csv("steam-games-dataset/clustered_games.csv")
 gameNames <- games %>% arrange(desc(Metacritic)) %>% select(ResponseName)
 gameGenres = c("All","Indie","Action","Adventure","Casual","Strategy","RPG","Simulation","EarlyAccess","FreeToPlay","Sports","Racing","MassivelyMultiplayer")
-
-prettyTable <- function(table_df, round_columns_func=is.numeric, round_digits=0) {
-  DT::datatable(table_df, style="bootstrap", filter = "top", rownames = FALSE, extensions = "Buttons", 
-                options = list(dom = 'Bfrtip', buttons = c('copy', 'csv', 'excel', 'pdf', 'print'))) %>%
-    formatRound(unlist(lapply(table_df, round_columns_func)), round_digits)
-}
 
 dashboardPage(
   dashboardHeader(title="Game recommendations", titleWidth = 310),
@@ -56,11 +49,20 @@ dashboardPage(
                   )
               ),
               column(width=5,
-                  div(style = "margin-top:-30px;",
+                  div(style = "margin-top:-20px; height:200px;",
                       plotlyOutput("scoregauge")
                   )
               )
               
+          ),
+          fluidRow(
+              column(width=6,
+                         h3("Games you might like:"),
+                         DT::dataTableOutput("cluster_games_table")
+                     
+              ),
+              column(width=6
+              )
           ),
           
           fluidRow(
@@ -75,10 +77,11 @@ dashboardPage(
       ),
       tabItem(tabName="about",
              h2("About section"),
-             "Created by:", br(),
+             
+             h4("Created by:"),
              "Mateusz Tabaszewski 151945", br(),
              "Barłomiej Pukacki 151942", br(),
-             "Data used:", br(),
+             h4("Data used:"),
              a("https://data.world/craigkelly/steam-game-data", href="https://data.world/craigkelly/steam-game-data")
       )
     )

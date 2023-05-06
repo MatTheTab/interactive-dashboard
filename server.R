@@ -4,13 +4,21 @@ library(shiny)
 library(shinydashboard)
 library(dplyr)
 library(plotly)
+library(DT)
 
-###################################################### DATA
+###################################################### Data
 
-games <- read.csv("steam-games-dataset/game-features-cut.csv")
-games$GenreIsAll = "True"
+games <- read.csv("steam-games-dataset/clustered_games.csv")
+test <- findcluster("Dota 2")
 
-###################################################### FUNCTIONS
+###################################################### Functions
+
+findcluster <- function(gamename){
+  gameCluster <- games[games$ResponseName==gamename,]$cluster
+  games %>% filter(cluster==gameCluster & ResponseName != gamename) %>% select(ResponseName, Metacritic) %>% rename(Game=ResponseName)
+}
+
+# test <- findcluster("Counter-Strike: Global Offensive")
 
 findscore <- function(gamename){
   games[games$ResponseName==gamename,]$Metacritic
@@ -30,7 +38,13 @@ findchoices <- function(genres){
 
 # findchoices(c("Action", "Adventure", "Indie", "FreeToPlay"))
 
-###################################################### SERVER
+
+prettyTable <- function(table_df, round_columns_func=is.numeric, round_digits=0) {
+  DT::datatable(table_df, style="bootstrap", rownames = F, selection="single",
+                options = list(dom = 'tp', scrollY="250px",  pageLength=100))
+}
+
+###################################################### Server
 
 shinyServer(
   function(input, output, session) {
@@ -49,8 +63,10 @@ shinyServer(
       fig <- plot_ly(
         type = "indicator",
         mode = "gauge+number",
+        width=250,
+        height=150,
         value = findscore(selected$game),
-        title = list(text = "Critic score", font = list(size = 22, color="#dddddd")),
+        title = list(text = "Metacritic score", font = list(size = 22, color="#dddddd")),
         gauge = list(
           axis = list(
             range = list(0, 100),
@@ -79,12 +95,14 @@ shinyServer(
         layout(
           paper_bgcolor = "#2c323b",
           font = list(color = "#dddddd", family = "Arial", size=50),
-          margin = list(r=50, t=70, b=50)
+          margin = list(r=40, l=40, t=70, b=10)
         )
       
       fig
     })
     
-    
+    output$cluster_games_table <- DT::renderDataTable({
+      prettyTable(findcluster(selected$game))
+    })
   }
 )
