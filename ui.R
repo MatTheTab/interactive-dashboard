@@ -89,6 +89,16 @@ dashboardPage(
              h4("Created by:"),
              "Mateusz Tabaszewski 151945", br(),
              "Barłomiej Pukacki 151942", br(),
+             h4("Description:"),
+             h5("Video games are the biggest modern medium for
+                entertainment, with over 10 000 games releasing yearly,
+                it has become nigh impossible to find the game that is
+                just right for you."),
+             h5("Fortunately our application functions
+                as a recommendation system for all those seeking
+                new and exciting games to play. Choose a game you already 
+                know and like, and see what other exciting gaming adventures
+                may be worth trying out!"),
              h4("Data used:"),
              a("https://data.world/craigkelly/steam-game-data", href="https://data.world/craigkelly/steam-game-data")
       )
