@@ -3,6 +3,7 @@ library(shinydashboard)
 library(dplyr)
 library(plotly)
 library(DT)
+library(shinycssloaders)
 
 games <- read.csv("steam-games-dataset/clustered_games.csv")
 gameNames <- games %>% arrange(desc(Metacritic)) %>% select(QueryName)
@@ -51,7 +52,7 @@ dashboardPage(
                   )
               ),
               column(width=7, offset=1,
-                     htmlOutput("headerimage")
+                     htmlOutput("headerimage")  %>% withSpinner()
                   
               )
           ),
