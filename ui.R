@@ -15,6 +15,7 @@ dashboardPage(
   dashboardSidebar(width = 130,
       sidebarMenu(
         menuItem("Dashboard", tabName="dashboard", icon = icon("gamepad", style="color:#dddddd")),
+        menuItem("Visualizations", tabName="visualizations", icon=icon("chart-column",class="fa-solid fa-chart-column", style="color:#dddddd")),
         menuItem("Help", tabName="help", icon = icon("circle-question", class="fa-solid", style="color:#dddddd")),
         menuItem("About", tabName="about", icon = icon("circle-info", style="color:#dddddd"))
       )
@@ -80,6 +81,10 @@ dashboardPage(
              )
       
       ),
+      tabItem(tabName = "visualizations",
+              h2("Advanced Visualizations"),
+              "Insert visualizations we want here!"
+              ),
       tabItem(tabName="help",
              h2("Help section"),
              "Information about dashboard usage"
