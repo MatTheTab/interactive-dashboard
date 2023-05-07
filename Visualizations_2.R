@@ -3,6 +3,7 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 library(forcats)
+library(gridExtra)
 
 games <- read.csv("C:\\Users\\Komputer\\interactive-dashboard\\steam-games-dataset\\clustered_games.csv")
 games$X.1<-NULL
@@ -123,4 +124,25 @@ genre_counts %>%
   ggplot(aes(x = Count, y = Genre, fill=Color)) +
   geom_col() +
   labs(title = "Histogram of Genre Counts", x = "Genre", y = "Count")
+
+#############################How old to play plot ##############################
+age_counts<-similar_games %>% count(RequiredAge)
+
+age_counts$RequiredAge <- factor(age_counts$RequiredAge)
+
+p1<-ggplot(age_counts, aes(x = RequiredAge, y = n)) +
+  geom_col() +
+  labs(x = "Age", y = "Number of Games") +
+  theme_minimal() + ggtitle("Distribution of Required Age for Similar Games")
+
+age_counts_2<-games %>% count(RequiredAge)
+
+age_counts_2$RequiredAge <- factor(age_counts_2$RequiredAge)
+
+p2<-ggplot(age_counts_2, aes(x = RequiredAge, y = n)) +
+  geom_col() +
+  labs(x = "Age", y = "Number of Games") +
+  theme_minimal() + ggtitle("Distribution of Required Age for all Games")
+
+grid.arrange(p1, p2, ncol = 1)
 
