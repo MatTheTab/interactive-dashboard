@@ -105,6 +105,13 @@ dashboardPage(
                 new and exciting games to play. Choose a game you already 
                 know and like, and see what other exciting gaming adventures
                 may be worth trying out!"),
+             h5("For this purpose data about almost 1000 games has been used
+                and by using clustering techniques as well as similarity
+                calculations, the app allows the user to see similar
+                games to the one that was chosen. The games were selected based
+                on number of recomendations but also some lesser-known games
+                had been chosen to allow users to experince the joy of discovering hidden
+                gems!"),
              h4("Data used:"),
              a("https://data.world/craigkelly/steam-game-data", href="https://data.world/craigkelly/steam-game-data")
       )

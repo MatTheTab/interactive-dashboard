@@ -161,8 +161,8 @@ shinyServer(
               axis.title.y = element_text(size=label_size, colour = "white"),
               axis.text = element_text(size=tick_size, color = "white"),
               panel.background = element_rect(fill="#2c323b"))
-      
       p
+      
       fig <- ggplotly(p)
       
       fig
