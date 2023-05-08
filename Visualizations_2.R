@@ -4,6 +4,7 @@ library(ggplot2)
 library(plotly)
 library(forcats)
 library(gridExtra)
+library(circlize)
 
 games <- read.csv("C:\\Users\\Komputer\\interactive-dashboard\\steam-games-dataset\\clustered_games.csv")
 games$X.1<-NULL
@@ -145,4 +146,19 @@ p2<-ggplot(age_counts_2, aes(x = RequiredAge, y = n)) +
   theme_minimal() + ggtitle("Distribution of Required Age for all Games")
 
 grid.arrange(p1, p2, ncol = 1)
+
+
+################################Network diagram#################################
+# Create a co-occurrence matrix
+game_genres <- games %>%
+  select(starts_with("Genre")) %>%
+  mutate_all(~ifelse(. == "True", 1, 0))
+game_genres$GenreIsAll=NULL
+
+game_genres <- as.matrix(game_genres)
+co_occur <- t(game_genres) %*% game_genres
+diag(co_occur) <- 0
+
+# Create a chord diagram
+chordDiagram(co_occur)
 

@@ -73,7 +73,8 @@ p <- ggplot(head(similar_games,number_of_points), aes(x = RecommendationCount, y
         axis.title.x = element_text(size=label_size, colour = "white"),
         axis.title.y = element_text(size=label_size, colour = "white"),
         axis.text = element_text(size=tick_size, color = "white"),
-        panel.background = element_rect(fill="#2c323b"))
+        panel.background = element_rect(fill="#2c323b")) +
+  scale_x_log10()
   
 p
 fig <- ggplotly(p)
