@@ -5,6 +5,7 @@ library(plotly)
 library(forcats)
 library(gridExtra)
 library(circlize)
+library(stringr)
 
 games <- read.csv("C:\\Users\\Komputer\\interactive-dashboard\\steam-games-dataset\\clustered_games.csv")
 games$X.1<-NULL
@@ -158,12 +159,27 @@ game_genres <- games %>%
   select(starts_with("Genre")) %>%
   mutate_all(~ifelse(. == "True", 1, 0))
 game_genres$GenreIsAll=NULL
+game_genres<-game_genres %>% rename_with(~str_remove(., "GenreIs"))
 
 # Calculate the co-occurrence matrix
 game_genres <- as.matrix(game_genres)
 co_occur <- t(game_genres) %*% game_genres
 diag(co_occur) <- 0
 
-# Create an interactive chord diagram
-chorddiag(co_occur)
 
+my_colors <- c("#a6cee3",
+  "#1f78b4",
+  "#b2df8a",
+  "#33a02c",
+  "#fb9a99",
+  "#e31a1c",
+  "#fdbf6f",
+  "#ff7f00",
+  "#cab2d6",
+  "#6a3d9a",
+  "#ffff99",
+  "#b15928")
+
+# Create an interactive chord diagram
+chorddiag(co_occur,  groupColors = my_colors)
+chorddiag(co_occur)
