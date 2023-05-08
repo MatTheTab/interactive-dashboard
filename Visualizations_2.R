@@ -150,15 +150,20 @@ grid.arrange(p1, p2, ncol = 1)
 
 ################################Network diagram#################################
 # Create a co-occurrence matrix
+#devtools::install_github("mattflor/chorddiag")
+library(chorddiag)
+
+# Load the data
 game_genres <- games %>%
   select(starts_with("Genre")) %>%
   mutate_all(~ifelse(. == "True", 1, 0))
 game_genres$GenreIsAll=NULL
 
+# Calculate the co-occurrence matrix
 game_genres <- as.matrix(game_genres)
 co_occur <- t(game_genres) %*% game_genres
 diag(co_occur) <- 0
 
-# Create a chord diagram
-chordDiagram(co_occur)
+# Create an interactive chord diagram
+chorddiag(co_occur)
 
