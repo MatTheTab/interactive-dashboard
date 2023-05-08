@@ -33,6 +33,17 @@ findimage <- function(gamename){
 
 # paste('<img src="',findimage("Counter-Strike: Global Offensive"),'">', sep='', collapse=NULL)
 
+finddescription <- function(gamename){
+  games[games$QueryName==gamename,]$AboutText
+}
+
+findlanguages <- function(gamename){
+  games[games$QueryName==gamename,]$SupportedLanguages
+}
+
+findrequirements <- function(gamename){
+  games[games$QueryName==gamename,]$PCMinReqsText
+}
 
 findchoices <- function(genres){
   filteredGames <- games
@@ -80,7 +91,10 @@ shinyServer(
     selected <- reactiveValues(game=NULL, genres="All")
     
     observeEvent(input$gamesearch, {
-      selected$game = input$gamesearch
+      selected$game = req(input$gamesearch)
+      hide("bar")
+      hide("density")
+      show("scatter")
     })
     
     observeEvent(input$genresearch, {
@@ -93,6 +107,36 @@ shinyServer(
       updateSelectizeInput(session, inputId = "gamesearch", selected=selected$game)
     })
     
+    observeEvent(input$scatterbutton,{
+      hide("bar")
+      hide("density")
+      show("scatter")
+    })
+    
+    observeEvent(input$barbutton,{
+      hide("scatter")
+      hide("density")
+      show("bar")
+    })
+    
+    observeEvent(input$densitybutton,{
+      hide("bar")
+      hide("scatter")
+      show("density")
+    })
+    
+    output$description <- renderText({
+      finddescription(selected$game)
+    })
+    
+    output$requirements <- renderText({
+      findrequirements(selected$game)
+    })
+    
+    output$languages <- renderText({
+      findlanguages(selected$game)
+    })
+    
     output$scoregauge <- renderPlotly({
       fig <- plot_ly(
         type = "indicator",
@@ -100,6 +144,11 @@ shinyServer(
         width=250,
         height=150,
         value = findscore(selected$game),
+        number=list(
+          font=list(
+            color=ifelse(findscore(selected$game)<76, ifelse(findscore(selected$game)<51, "#FF0000", "#FFCC33"), "#66CC33")
+            )
+          ),
         title = list(text = "Metacritic score", font = list(size = 22, color="#dddddd")),
         gauge = list(
           axis = list(
@@ -150,22 +199,23 @@ shinyServer(
       similar_games <- games %>% filter(cluster == cluster_value)
       similar_games <- similar_games %>% filter(QueryName != selected$game)
       
-      title_size <- 20
-      label_size <- 16
-      tick_size <- 12
+      title_size <- 18
+      label_size <- 13
+      tick_size <- 10
       grid_size <- 0.5
       
       p <- ggplot(head(similar_games,number_of_points), aes(x = RecommendationCount, y = Metacritic,
                                                             text = paste("Title:", QueryName))) +
-        geom_point(color="white") +
+        geom_point(color="#66c0f4") +
         labs(x = "RecommendationCount", y = "MetacriticScore") +
-        ggtitle("Quality vs Popularity for Similar Games") +
+        ggtitle("Game Quality vs Score for Similar Games") + 
         theme(plot.background = element_rect(fill="#2c323b"),
-              plot.title=element_text(size=title_size-1, colour = "white", hjust = 0),
+              plot.title=element_text(size=title_size-3, colour = "white", hjust = -0.6),
               axis.title.x = element_text(size=label_size, colour = "white"),
               axis.title.y = element_text(size=label_size, colour = "white"),
               axis.text = element_text(size=tick_size, color = "white"),
-              panel.background = element_rect(fill="#2c323b"))
+              panel.background = element_rect(fill="#2c323b")) +
+        scale_x_log10()
       p
       
       fig <- ggplotly(p)

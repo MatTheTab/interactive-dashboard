@@ -4,10 +4,11 @@ library(dplyr)
 library(plotly)
 library(DT)
 library(shinycssloaders)
+library(shinyjs)
 
 games <- read.csv("steam-games-dataset/clustered_games.csv")
 gameNames <- games %>% arrange(desc(Metacritic)) %>% select(QueryName)
-gameGenres = c("All","Indie","Action","Adventure","Casual","Strategy","RPG","Simulation","EarlyAccess","FreeToPlay","Sports","Racing","MassivelyMultiplayer")
+gameGenres <- c("All","Indie","Action","Adventure","Casual","Strategy","RPG","Simulation","EarlyAccess","FreeToPlay","Sports","Racing","MassivelyMultiplayer")
 
 dashboardPage(
   dashboardHeader(title="Game recommendations", titleWidth = 310),
@@ -15,13 +16,14 @@ dashboardPage(
   dashboardSidebar(width = 130,
       sidebarMenu(
         menuItem("Dashboard", tabName="dashboard", icon = icon("gamepad", style="color:#dddddd")),
-        menuItem("Visualizations", tabName="visualizations", icon=icon("chart-column",class="fa-solid fa-chart-column", style="color:#dddddd")),
+        menuItem("Visualizations", tabName="visualizations", icon=icon("chart-column", class="fa-solid fa-chart-column", style="color:#dddddd")),
         menuItem("Help", tabName="help", icon = icon("circle-question", class="fa-solid", style="color:#dddddd")),
         menuItem("About", tabName="about", icon = icon("circle-info", style="color:#dddddd"))
       )
   ),
   
   dashboardBody(
+    useShinyjs(),
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
     
@@ -48,31 +50,54 @@ dashboardPage(
                     multiple=T,
                     choices = gameGenres,
                   ),
-                  div(style = "margin-top:-20px; height:200px;",
-                      plotlyOutput("scoregauge")
+                  div(style = "height:235px;",
+                      htmlOutput("headerimage")  %>% withSpinner()
                   )
               ),
-              column(width=7, offset=1,
-                     htmlOutput("headerimage")  %>% withSpinner()
-                  
+              column(width=2,
+                     div(style="margin-left:-40px; margin-top:-20px; height:200px;",
+                         plotlyOutput("scoregauge")
+                     )
+              ),
+              column(width=6,
+                     div(style="margin-top:-40px; margin-left:30px; margin-right:20px;",
+                       h3("Games you might like:"),
+                       DT::dataTableOutput("cluster_games_table"))
               )
           ),
           fluidRow(
-              column(width=7,
-                  plotlyOutput("scatter")
-                     
-              ),
               column(width=5,
-                  h3("Games you might like:"),
-                  DT::dataTableOutput("cluster_games_table")
-              )
-          ),
-          fluidRow(
-              column(width=6,
-                  plotOutput("bar")
+                     div(style="margin-top:-25px;",
+                       h4("Game description:"),
+                       div(style="max-height:85px; overflow-y:scroll;",
+                           textOutput("description")
+                       ),
+                       h4("PC minimum requirements:"),
+                       div(style="max-height:85px; overflow-y:scroll;",
+                           textOutput("requirements"),
+                       ),
+                       h4("Supported languages:"),
+                       div(style="max-height:85px; overflow-y:scroll;",
+                           textOutput("languages")
+                       ),
+                     )
+              ),
+              column(width=1,
+                     div(style="margin-top:15px; margin-right:0px; margin-left:30px;",
+                         actionButton("scatterbutton","",icon=icon("hand-dots")),
+                         actionButton("barbutton","",icon=icon("chart-bar")),
+                         actionButton("densitybutton","",icon=icon("chart-area")),
+                         actionButton("plot4","",icon=icon("chart-bar"))
+                      )
               ),
               column(width=6,
-                  plotOutput("density")
+                     div(style="margin-top:-50px;",
+                       div(style="margin-top:-10px; margin-right:30px;",
+                           plotlyOutput("scatter"),
+                           plotOutput("bar"),
+                           plotOutput("density")
+                       )
+                     )
               )
           ),
           fluidRow(
