@@ -88,6 +88,11 @@ shinyServer(
       updateSelectizeInput(session, inputId="gamesearch", choices=findchoices(selected$genres))
     })
     
+    observeEvent(input$cluster_games_table_cell_clicked, {
+      selected$game = req(input$cluster_games_table_cell_clicked$value)
+      updateSelectizeInput(session, inputId = "gamesearch", selected=selected$game)
+    })
+    
     output$scoregauge <- renderPlotly({
       fig <- plot_ly(
         type = "indicator",
