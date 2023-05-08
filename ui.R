@@ -51,7 +51,7 @@ dashboardPage(
                     choices = gameGenres,
                   ),
                   div(style = "height:235px;",
-                      htmlOutput("headerimage")  %>% withSpinner()
+                      htmlOutput("headerimage") %>% withSpinner(5,color.background = "#2c323b", proxy.height = "200px")
                   )
               ),
               column(width=2,
