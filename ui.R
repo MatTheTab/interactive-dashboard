@@ -107,8 +107,22 @@ dashboardPage(
       
       ),
       tabItem(tabName = "visualizations",
-              h2("Advanced Visualizations"),
-              "Insert visualizations we want here!"
+              fluidRow(
+                h2("Advanced Visualizations"),
+                "Insert visualizations we want here!",
+                column(width=8,
+                       sliderInput("heatmapcluster", "Choose cluster", 1, 10, value = 1, step=1, width = "100%", animate = T),
+                       plotOutput("heatmap")
+                ),
+                column(width=2
+                ),
+                column(width=2)
+              ),
+              fluidRow(
+                div(style = "margin-left:10px;",
+                    img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
+              )
+              
               ),
       tabItem(tabName="help",
              h2("Help section"),

@@ -4,15 +4,15 @@ library(tidyr)
 library(viridis)
 library(hrbrthemes)
 
-logical_to_binary <- function(x){
-  return(ifelse(x=="True", 1, 0))
-}
-
 games <- read.csv("steam-games-dataset/clustered_games.csv")
 
 chosen_cluster <- 4
 
-gameGenres <- c("Indie","Action","Adventure","Casual","Strategy","RPG","Simulation","EarlyAccess","FreeToPlay","Sports","Racing","MassivelyMultiplayer")
+#gameGenres <- c("Indie","Action","Adventure","Casual","Strategy","RPG","Simulation","EarlyAccess","FreeToPlay","Sports","Racing","MassivelyMultiplayer")
+
+logical_to_binary <- function(x){
+  return(ifelse(x=="True", 1, 0))
+}
 
 cluster_genres <- games %>% select(GenreIsIndie:GenreIsMassivelyMultiplayer) %>% filter(games$cluster == chosen_cluster)
 cluster_genres <- cluster_genres %>% lapply(logical_to_binary)
