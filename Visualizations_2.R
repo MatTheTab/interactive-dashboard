@@ -106,6 +106,7 @@ similar_scores_density %>% ggplot(aes(x, y)) +
 
 #################Bar plot for distribution of genres############################
 
+chosen_game <- "Team Fortress 2"
 genre_counts <- similar_games %>%
   mutate(across(starts_with("Genre"), ~ .x == "True")) %>%
   summarise(across(starts_with("Genre"), ~ sum(.x))) %>%

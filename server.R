@@ -103,6 +103,7 @@ shinyServer(
       selected$game = req(input$gamesearch)
       hide("bar")
       hide("density")
+      hide("histogram")
       show("scatter")
     })
     
@@ -342,7 +343,6 @@ shinyServer(
       cluster_value <- games %>% filter(QueryName == selected$game) %>% pull(cluster)
       similar_games <- games %>% filter(cluster == cluster_value)
       game_number<-which(similar_games$QueryName == selected$game)
-      similar_games <- similar_games %>% filter(QueryName != selected$game)
       
       genre_counts <- similar_games %>%
         mutate(across(starts_with("Genre"), ~ .x == "True")) %>%
@@ -379,6 +379,7 @@ shinyServer(
               axis.text = element_text(size=tick_size, color = "white"),
               axis.title = element_text(size=label_size, colour = "white"),
               panel.grid = element_line(color="#DDDDDD"),
+              panel.grid.major.x=element_blank(),
               panel.background = element_rect(fill="#2c323b"))
     })
     
