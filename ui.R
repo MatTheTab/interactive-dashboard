@@ -5,6 +5,7 @@ library(plotly)
 library(DT)
 library(shinycssloaders)
 library(shinyjs)
+library(chorddiag)
 
 games <- read.csv("steam-games-dataset/clustered_games.csv")
 gameNames <- games %>% arrange(desc(Metacritic)) %>% select(QueryName)

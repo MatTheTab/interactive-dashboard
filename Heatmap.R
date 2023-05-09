@@ -46,7 +46,6 @@ grid_size <- 0.5
 genre_heat %>% ggplot(aes(x, y, fill = z)) + 
   geom_tile() +
   scale_fill_viridis(discrete=FALSE) +
-  theme_ipsum() +
   ggtitle(paste("Co-occurrance of Genres in Cluster",chosen_cluster)) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
     axis.title.x = element_blank(),

@@ -6,7 +6,6 @@ library(DT)
 library(ggplot2)
 library(tidyr)
 library(viridis)
-library(hrbrthemes)
 library(forcats)
 library(gridExtra)
 library(circlize)
@@ -499,14 +498,13 @@ shinyServer(
       genre_heat %>% ggplot(aes(x, y, fill = z)) + 
         geom_tile() +
         scale_fill_viridis(discrete=FALSE) +
-        theme_ipsum() +
         ggtitle(paste("Co-occurrance of Genres in Cluster", selected$heatcluster)) + 
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
               axis.title.x = element_blank(),
               axis.title.y = element_blank(),
               plot.background = element_rect(fill="#2c323b"),
-              plot.title=element_text(size=title_size, colour = "white", hjust = 0.2),
-              axis.text = element_text(size=tick_size, color = "white"),
+              plot.title=element_text(size=title_size+2, colour = "white", hjust = 0.2),
+              axis.text = element_text(size=tick_size+2, color = "white"),
               panel.grid = element_line(color="#DDDDDD"),
               panel.background = element_rect(fill="#2c323b"),
               legend.position = "none")
