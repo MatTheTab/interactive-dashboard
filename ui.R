@@ -21,7 +21,7 @@ dashboardPage(
         menuItem("Help", tabName="help", icon = icon("circle-question", class="fa-solid", style="color:#dddddd")),
         menuItem("About", tabName="about", icon = icon("circle-info", style="color:#dddddd"))
       ),
-      div(style = "margin-left:20px; top:800px; position:absolute;",
+      div(style = "margin-left:20px; top:600px; position:absolute;",
           img(src = "imgs/PP_monogram_kontur.png", height=85, width=85))
   ),
   
