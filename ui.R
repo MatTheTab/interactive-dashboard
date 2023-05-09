@@ -154,7 +154,41 @@ dashboardPage(
                 had been chosen to allow users to experince the joy of discovering hidden
                 gems!"),
              h4("Data used:"),
-             a("https://data.world/craigkelly/steam-game-data", href="https://data.world/craigkelly/steam-game-data")
+             a("https://data.world/craigkelly/steam-game-data", href="https://data.world/craigkelly/steam-game-data"),
+             h4("Info and Graph Descriptions:"),
+             h5("The bellow section is an in-detail explanation of visualizations
+                presented in this dashboard. The elements will be described consistently
+                with what is presented on the image below:"),
+             h5("Here insert screenshot of the dashboard"),
+             h5("1.A - Text field form which games can be chosen, game can be selected
+                from a list or typed-in manually."),
+             h5("1.B - Text field from which game genres can be selected, doing so will
+                restrict selection of games in 1.A only to the specified genres."),
+             h5("2.A - Header image for the selected game"),
+             h5("2.B - Description of the chosen game"),
+             h5("2.C - Minimum requirements for the game"),
+             h5("2.D - Languages supported by the currently selected game"),
+             h5("3 - Gauge showing the Metacritic score of the currently selected game
+                on the range from 0 to 100, colors on the gauge correspond to appropriate
+                colors assigned to games by Metacritic(red- unfavorable review, yellow-
+                mixed review and green- favourable review)"),
+             h5("4 - Recommended games based on previously performed clustering with
+                10 created clusters performed with kmeans method. When clustering 
+                game genres, price, year of production as well as description was taken
+                into account to create 'similar games' that might interest the user"),
+             h5("5 - Panel of possible visualizations"),
+             h5("5.A - Scatterplot comparing the Metacritic score as well as 
+                number of recommendations for games from the same cluster as selected one-
+                'similar games'. This is meant to help users find interesting, underrated
+                games. Due to some games being much more popular than others and for the
+                sake of clarity, logarithmic scale was applied for the x-axis."),
+             h5("5.B - Plot showing the most similar games to the chosen one from the same cluster
+                based on genres, the more genres match, the higher the similarity.
+                For some games all genres for all top 15 most similar games may be the same,
+                maning that their level of similarity will be equal."),
+             h5("5.C - Density distribution of Metacritic scores from the similar games to the 
+                one selected, with the currently selected one also marked as a vertical
+                line.")
       )
     )
   )
