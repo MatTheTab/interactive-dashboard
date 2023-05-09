@@ -126,7 +126,43 @@ dashboardPage(
               ),
       tabItem(tabName="help",
              h2("Help section"),
-             "Information about dashboard usage"
+             h4("How to Use the Dashboard:"),
+             h5("This section is meant to help the user understand and 
+             use this dashboard. All explonations below will refer to the 
+             elements presented on the screen with accordance to the numerical representation
+             shown below:"),
+             h5("insert image here"),
+             h5("0 - You can use this element to hide the sidebar"),
+             h5("1.A - You can use this field to look up the name of 
+                a game you like and the dashboard will show you 
+                similar games that you may be interested in. You can either pick
+                a game from the list or type the name manually."),
+             h5("1.B - You can restrict what genres you are interested in, 
+                so that it is easier to find the games you may like
+                in the 1.A field."),
+             h5("2 - Visualization elements meant to show the user information about
+                the picked game as well as similar games that may end up being
+                interesting. For more information go to the 'About' section present
+                in the panel number 3."),
+             h5("2.A - Table with games that are similar to the one you selected
+                games in here can be sorted by price and Metacritic score."),
+             h5("2.B - Icons allowing the user to switch between 4 visualizations,
+                interactive scatterplot-you can see the name of the game by hovering over
+                the corresponding point, bar chart showing similar games,
+                distribution plot of Metacritic scores for similar games, 
+                bar chart showing what age requirements categories apply
+                to the similar games. For more information go to the 'About'
+                section on the sidebar- element 3."),
+             h5("3 - Sidebar with icons allowing for switching between
+                different dashboard pages."),
+             h5("Dashboard - Displays information about the selected game - starting
+                page."),
+             h5("Visualizations - Displays general visualizations independent of
+                the selected game."),
+             h5("Help - Currently visited page, explains how to use the application."),
+             h5("About - Gives more detailed description of presented visualizations,
+                how similar games are determined, also includes data about authors
+                and dataset.")
       ),
       tabItem(tabName="about",
              h2("About section"),
@@ -182,11 +218,18 @@ dashboardPage(
                 sake of clarity, logarithmic scale was applied for the x-axis."),
              h5("5.B - Plot showing the most similar games to the chosen one from the same cluster
                 based on genres, the more genres match, the higher the similarity.
+                In practice similarity in this case is inversly proportional to 
+                Hamming distance calculated on genres, with additional safe-guard against infinite
+                similarity in case of 0 distance.
                 For some games all genres for all top 15 most similar games may be the same,
                 maning that their level of similarity will be equal."),
              h5("5.C - Density distribution of Metacritic scores from the similar games to the 
                 one selected, with the currently selected one also marked as a vertical
-                line.")
+                line."),
+             h5("5.D - Bar chart showing the number of games with the given 
+                age requirement for all games vs for the selected cluster."),
+             h5("Here insert image from 'Visualizations' tab"),
+             h5("Describe in detail this tab")
       )
     )
   )
