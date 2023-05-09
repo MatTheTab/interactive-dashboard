@@ -97,7 +97,11 @@ dashboardPage(
                            plotlyOutput("scatter"),
                            plotOutput("bar"),
                            plotOutput("density"),
-                           plotOutput("histogram")
+                           plotOutput("histogram"),
+                           div(style="margin-top:-80px;",
+                             checkboxInput("nozeroage", "Omit age 0", value = F),
+                             plotOutput("agebars")
+                           ),
                        )
                      )
               )
@@ -109,23 +113,18 @@ dashboardPage(
       
       ),
       tabItem(tabName = "visualizations",
+              h2("Advanced Visualizations"),
               fluidRow(
-                h2("Advanced Visualizations"),
-                "Insert visualizations we want here!",
-                column(width=8,
-                       sliderInput("heatmapcluster", "Choose cluster", 1, 10, value = 1, step=1, width = "100%", animate = T),
+                column(width=5,
+                       sliderInput("heatmapcluster", "Choose a cluster", 1, 10, value = 1, step=1, width = "100%", animate = T),
                        plotOutput("heatmap")
                 ),
-                column(width=2
+                column(width=7,
+                       div(style="margin-top:-40px; margin-left:-40px;",
+                         chorddiagOutput("chorddiag", width="700px", height="700px"))
                 ),
-                column(width=2)
-              ),
-              fluidRow(
-                div(style = "margin-left:10px;",
-                    img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
               )
-              
-              ),
+      ),
       tabItem(tabName="help",
              h2("Help section"),
              h4("How to Use the Dashboard:"),

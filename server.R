@@ -11,6 +11,7 @@ library(forcats)
 library(gridExtra)
 library(circlize)
 library(stringr)
+library(chorddiag)
 
 ###################################################### Data
 
@@ -97,13 +98,15 @@ similarity_only_genres <-function(df, row1, row2){
 
 shinyServer(
   function(input, output, session) {
-    selected <- reactiveValues(game=NULL, genres="All", heatcluster=1)
+    selected <- reactiveValues(game=NULL, genres="All", heatcluster=1, omitagebarzero=F)
     
     observeEvent(input$gamesearch, {
       selected$game = req(input$gamesearch)
       hide("bar")
       hide("density")
       hide("histogram")
+      hide("agebars")
+      hide("nozeroage")
       show("scatter")
     })
     
@@ -121,6 +124,8 @@ shinyServer(
       hide("bar")
       hide("density")
       hide("histogram")
+      hide("agebars")
+      hide("nozeroage")
       show("scatter")
     })
     
@@ -128,6 +133,8 @@ shinyServer(
       hide("scatter")
       hide("density")
       hide("histogram")
+      hide("agebars")
+      hide("nozeroage")
       show("bar")
     })
     
@@ -135,6 +142,8 @@ shinyServer(
       hide("bar")
       hide("scatter")
       hide("histogram")
+      hide("agebars")
+      hide("nozeroage")
       show("density")
     })
     
@@ -142,7 +151,18 @@ shinyServer(
       hide("bar")
       hide("scatter")
       hide("density")
+      hide("agebars")
+      hide("nozeroage")
       show("histogram")
+    })
+    
+    observeEvent(input$agebutton,{
+      hide("bar")
+      hide("scatter")
+      hide("density")
+      hide("histogram")
+      show("agebars")
+      show("nozeroage")
     })
     
     output$description <- renderText({
@@ -159,6 +179,10 @@ shinyServer(
     
     observeEvent(input$heatmapcluster, {
       selected$heatcluster <- input$heatmapcluster
+    })
+    
+    observeEvent(input$nozeroage, {
+      selected$omitagebarzero <- input$nozeroage
     })
     
     output$scoregauge <- renderPlotly({
@@ -213,7 +237,7 @@ shinyServer(
     })
     
     output$cluster_games_table <- DT::renderDataTable({
-      prettyTable(findcluster(selected$game))
+        prettyTable(findcluster(selected$game))
     })
     
     output$scatter <- renderPlotly({
@@ -380,7 +404,66 @@ shinyServer(
               axis.title = element_text(size=label_size, colour = "white"),
               panel.grid = element_line(color="#DDDDDD"),
               panel.grid.major.x=element_blank(),
+              panel.grid.minor.y=element_blank(),
+              panel.background = element_rect(fill="#2c323b")) +
+        scale_fill_manual(values=c("#a2d669", "#66c0f4"))
+    })
+    
+    output$agebars <- renderPlot({
+      cluster_value <- games %>% filter(QueryName == selected$game) %>% pull(cluster)
+      similar_games <- games %>% filter(cluster == cluster_value)
+      game_number<-which(similar_games$QueryName == selected$game)
+      
+      age_counts<-similar_games %>% count(RequiredAge)
+      
+      age_counts$RequiredAge <- factor(age_counts$RequiredAge)
+      
+      title_size <- 20
+      label_size <- 16
+      tick_size <- 12
+      grid_size <- 0.5
+      
+      if(selected$omitagebarzero){
+        age_counts <- age_counts %>% filter(RequiredAge != 0)
+      }
+      
+      p1<-ggplot(age_counts, aes(x = RequiredAge, y = n)) +
+        geom_col(fill="#66c0f4") +
+        labs(x = "Age", y = "Number of Games") +
+        theme_minimal() + ggtitle("Distribution of Required Age for Similar Games") + 
+        theme(legend.position = "none",
+            plot.background = element_rect(fill="#2c323b"),
+            plot.title=element_text(size=title_size, colour = "white"),
+            axis.text = element_text(size=tick_size, color = "white"),
+            axis.title = element_text(size=label_size, colour = "white"),
+            panel.grid = element_line(color="#DDDDDD"),
+            panel.grid.major.x = element_blank(),
+            panel.grid.minor.y=element_blank(),
+            panel.background = element_rect(fill="#2c323b"))
+      
+      age_counts_2<-games %>% count(RequiredAge)
+      
+      age_counts_2$RequiredAge <- factor(age_counts_2$RequiredAge)
+      
+      if(selected$omitagebarzero){
+        age_counts_2 <- age_counts_2 %>% filter(RequiredAge != 0)
+      }
+      
+      p2<-ggplot(age_counts_2, aes(x = RequiredAge, y = n)) +
+        geom_col(fill="#66c0f4") +
+        labs(x = "Age", y = "Number of Games") +
+        theme_minimal() + ggtitle("Distribution of Required Age for all Games") + 
+        theme(legend.position = "none",
+              plot.background = element_rect(fill="#2c323b"),
+              plot.title=element_text(size=title_size, colour = "white", hjust = 0.1),
+              axis.text = element_text(size=tick_size, color = "white"),
+              axis.title = element_text(size=label_size, colour = "white"),
+              panel.grid = element_line(color="#DDDDDD"),
+              panel.grid.major.x = element_blank(),
+              panel.grid.minor.y=element_blank(),
               panel.background = element_rect(fill="#2c323b"))
+      
+      grid.arrange(p1, p2, ncol = 1)
     })
     
     output$heatmap <- renderPlot({
@@ -429,5 +512,34 @@ shinyServer(
               legend.position = "none")
     })
     
+    output$chorddiag <- renderChorddiag({
+      game_genres <- games %>%
+        select(starts_with("Genre")) %>%
+        mutate_all(~ifelse(. == "True", 1, 0))
+      game_genres$GenreIsAll=NULL
+      game_genres<-game_genres %>% rename_with(~str_remove(., "GenreIs")) %>% rename(MassMulti=MassivelyMultiplayer)
+      
+      # Calculate the co-occurrence matrix
+      game_genres <- as.matrix(game_genres)
+      co_occur <- t(game_genres) %*% game_genres
+      diag(co_occur) <- 0
+      
+      
+      my_colors <- c("#a6cee3",
+                     "#1f78b4",
+                     "#b2df8a",
+                     "#33a02c",
+                     "#fb9a99",
+                     "#e31a1c",
+                     "#fdbf6f",
+                     "#ff7f00",
+                     "#cab2d6",
+                     "#6a3d9a",
+                     "#ffff99",
+                     "#b15928")
+      
+      # Create an interactive chord diagram
+      chorddiag(co_occur, groupColors = my_colors, margin=120, groupedgeColor = "white", groupnameFontsize = 16)
+    })
   }
 )
