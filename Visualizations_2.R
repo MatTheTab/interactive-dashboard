@@ -8,6 +8,7 @@ library(circlize)
 library(stringr)
 
 games <- read.csv("C:\\Users\\Komputer\\interactive-dashboard\\steam-games-dataset\\clustered_games.csv")
+games <- read.csv("steam-games-dataset/clustered_games.csv")
 games$X.1<-NULL
 games$X<-NULL
 chosen_game="Terraria"
@@ -121,8 +122,10 @@ genre_counts <- genre_counts %>%
 genre_counts <- genre_counts %>%
   arrange(desc(Count))
 
+genre_counts$Genre <- lapply(genre_counts$Genre, function(x) substring(x, 8,20)) 
+
 genre_counts %>%
-  mutate(Genre = fct_reorder(Genre, Count)) %>%
+  mutate(Genre=fct_reorder(as.character(Genre), Count)) %>%
   ggplot(aes(x = Count, y = Genre, fill=Color)) +
   geom_col() +
   labs(title = "Histogram of Genre Counts", x = "Genre", y = "Count")

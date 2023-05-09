@@ -7,6 +7,10 @@ library(ggplot2)
 library(tidyr)
 library(viridis)
 library(hrbrthemes)
+library(forcats)
+library(gridExtra)
+library(circlize)
+library(stringr)
 
 ###################################################### Data
 
@@ -115,19 +119,29 @@ shinyServer(
     observeEvent(input$scatterbutton,{
       hide("bar")
       hide("density")
+      hide("histogram")
       show("scatter")
     })
     
     observeEvent(input$barbutton,{
       hide("scatter")
       hide("density")
+      hide("histogram")
       show("bar")
     })
     
     observeEvent(input$densitybutton,{
       hide("bar")
       hide("scatter")
+      hide("histogram")
       show("density")
+    })
+    
+    observeEvent(input$histbutton,{
+      hide("bar")
+      hide("scatter")
+      hide("density")
+      show("histogram")
     })
     
     output$description <- renderText({
@@ -322,6 +336,50 @@ shinyServer(
               panel.grid.major = element_blank(),
               panel.background = element_rect(fill="#2c323b"),
               legend.position = "none")
+    })
+    
+    output$histogram <- renderPlot({
+      cluster_value <- games %>% filter(QueryName == selected$game) %>% pull(cluster)
+      similar_games <- games %>% filter(cluster == cluster_value)
+      game_number<-which(similar_games$QueryName == selected$game)
+      similar_games <- similar_games %>% filter(QueryName != selected$game)
+      
+      genre_counts <- similar_games %>%
+        mutate(across(starts_with("Genre"), ~ .x == "True")) %>%
+        summarise(across(starts_with("Genre"), ~ sum(.x))) %>%
+        pivot_longer(everything(), names_to = "Genre", values_to = "Count")
+      
+      temp_data <-similar_games %>% select(starts_with("Genre")) %>% slice(game_number)
+      temp_data <- temp_data %>% mutate(across(everything(), ~ ifelse(.x, "green", "grey")))
+      temp_data <- temp_data %>% gather(key = "Genre", value = "Color")
+      genre_counts <- left_join(genre_counts, temp_data, by="Genre")
+      
+      genre_counts <- genre_counts %>%
+        filter((Genre != "GenreIsAll") & (Genre != "GenreIsNonGame"))
+      
+      genre_counts <- genre_counts %>%
+        arrange(desc(Count))
+      
+      genre_counts$Genre <- lapply(genre_counts$Genre, function(x) substring(x, 8,20)) 
+      
+      title_size <- 20
+      label_size <- 16
+      tick_size <- 12
+      grid_size <- 0.5
+      
+      genre_counts %>% 
+        mutate(Genre = fct_reorder(as.character(Genre), Count, .desc=T)) %>% 
+        ggplot(aes(x = Genre, y = Count, fill=Color)) +
+        geom_col() +
+        labs(title = "Histogram of Genre Counts", x = "Genre", y = "Count") +
+        theme(legend.position = "none",
+              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+              plot.background = element_rect(fill="#2c323b"),
+              plot.title=element_text(size=title_size, colour = "white", hjust = 0.2),
+              axis.text = element_text(size=tick_size, color = "white"),
+              axis.title = element_text(size=label_size, colour = "white"),
+              panel.grid = element_line(color="#DDDDDD"),
+              panel.background = element_rect(fill="#2c323b"))
     })
     
     output$heatmap <- renderPlot({

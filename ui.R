@@ -87,7 +87,7 @@ dashboardPage(
                          actionButton("scatterbutton","",icon=icon("hand-dots")),
                          actionButton("barbutton","",icon=icon("chart-bar")),
                          actionButton("densitybutton","",icon=icon("chart-area")),
-                         actionButton("plot4","",icon=icon("chart-bar"))
+                         actionButton("histbutton","",icon=icon("signal", class="fa-flip-horizontal", style="width:14px;"))
                       )
               ),
               column(width=6,
@@ -95,7 +95,8 @@ dashboardPage(
                        div(style="margin-top:-10px; margin-right:30px;",
                            plotlyOutput("scatter"),
                            plotOutput("bar"),
-                           plotOutput("density")
+                           plotOutput("density"),
+                           plotOutput("histogram")
                        )
                      )
               )
