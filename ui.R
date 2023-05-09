@@ -87,7 +87,8 @@ dashboardPage(
                          actionButton("scatterbutton","",icon=icon("hand-dots")),
                          actionButton("barbutton","",icon=icon("chart-bar")),
                          actionButton("densitybutton","",icon=icon("chart-area")),
-                         actionButton("histbutton","",icon=icon("signal", class="fa-flip-horizontal", style="width:14px;"))
+                         actionButton("histbutton","",icon=icon("signal", class="fa-flip-horizontal", style="width:14px;")),
+                         actionButton("agebutton","",icon=icon("chart-column"))
                       )
               ),
               column(width=6,
