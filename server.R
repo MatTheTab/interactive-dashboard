@@ -394,7 +394,7 @@ shinyServer(
         mutate(Genre = fct_reorder(as.character(Genre), Count, .desc=T)) %>% 
         ggplot(aes(x = Genre, y = Count, fill=Color)) +
         geom_col() +
-        labs(title = "Histogram of Genre Counts", x = "Genre", y = "Count") +
+        labs(title = "Histogram of Similar Games Genre Counts", x = "Genre", y = "Count") +
         theme(legend.position = "none",
               axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
               plot.background = element_rect(fill="#2c323b"),

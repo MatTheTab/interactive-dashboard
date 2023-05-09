@@ -20,7 +20,9 @@ dashboardPage(
         menuItem("Visualizations", tabName="visualizations", icon=icon("chart-column", class="fa-solid fa-chart-column", style="color:#dddddd")),
         menuItem("Help", tabName="help", icon = icon("circle-question", class="fa-solid", style="color:#dddddd")),
         menuItem("About", tabName="about", icon = icon("circle-info", style="color:#dddddd"))
-      )
+      ),
+      div(style = "margin-left:20px; top:800px; position:absolute;",
+          img(src = "imgs/PP_monogram_kontur.png", height=85, width=85))
   ),
   
   dashboardBody(
@@ -106,12 +108,7 @@ dashboardPage(
                        )
                      )
               )
-          ),
-          fluidRow(
-               div(style = "margin-left:10px;",
-                     img(src = "imgs/PP_logotyp_black.png", height=85, width=510))
-             )
-      
+          )
       ),
       tabItem(tabName = "visualizations",
               h2("Advanced Visualizations"),
@@ -167,8 +164,14 @@ dashboardPage(
                 and dataset.")
       ),
       tabItem(tabName="about",
-             h2("About section"),
+              column(width=4,
+                h2("About section")
+              ),
+              column(width=8,
+                img(src = "imgs/PP_logotyp_black.png", height=85, width=510)
+              ),
              
+             br(),
              h4("Created by:"),
              "Mateusz Tabaszewski 151945", br(),
              "Barłomiej Pukacki 151942", br(),
