@@ -130,7 +130,7 @@ dashboardPage(
              use this dashboard. All explonations below will refer to the 
              elements presented on the screen with accordance to the numerical representation
              shown below:"),
-             column(width=5,
+             column(width=3,
                     img(src = "imgs/Dashboard_Screen_help.png", height=400, width=800)
              ),
              h5("0 - You can use this element to hide the sidebar"),
@@ -200,7 +200,7 @@ dashboardPage(
              h5("The bellow section is an in-detail explanation of visualizations
                 presented in this dashboard. The elements will be described consistently
                 with what is presented on the image below:"),
-             column(width=5,
+             column(width=3,
                     img(src = "/imgs/Dashboard_screen_about.png", height=400, width=800)
              ),
              h5("1.A - Text field form which games can be chosen, game can be selected
@@ -241,7 +241,7 @@ dashboardPage(
              h5("5.E - Bar chart showing the number of games with the given 
                 age requirement for all games vs for the selected cluster.
                 Allows for omitting 0 values by checking a box."),
-             column(width=5,
+             column(width=3,
                     img(src = "imgs/Dashboard_visualizations.png", height=400, width=800)
              ),
              h5("6 - Heatmap showing prevalence of game genres for each cluster
