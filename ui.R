@@ -130,7 +130,9 @@ dashboardPage(
              use this dashboard. All explonations below will refer to the 
              elements presented on the screen with accordance to the numerical representation
              shown below:"),
-             h5("insert image here"),
+             column(width=5,
+                    img(src = "imgs/Dashboard_Screen_help.png", height=400, width=800)
+             ),
              h5("0 - You can use this element to hide the sidebar"),
              h5("1.A - You can use this field to look up the name of 
                 a game you like and the dashboard will show you 
@@ -145,7 +147,7 @@ dashboardPage(
                 in the panel number 3."),
              h5("2.A - Table with games that are similar to the one you selected
                 games in here can be sorted by price and Metacritic score."),
-             h5("2.B - Icons allowing the user to switch between 4 visualizations,
+             h5("2.B - Icons allowing the user to switch between 5 visualizations,
                 interactive scatterplot-you can see the name of the game by hovering over
                 the corresponding point, bar chart showing similar games,
                 distribution plot of Metacritic scores for similar games, 
@@ -180,12 +182,12 @@ dashboardPage(
                 entertainment, with over 10 000 games releasing yearly,
                 it has become nigh impossible to find the game that is
                 just right for you."),
-             h5("Fortunately our application functions
+             h5("Fortunately, our application functions
                 as a recommendation system for all those seeking
                 new and exciting games to play. Choose a game you already 
                 know and like, and see what other exciting gaming adventures
                 may be worth trying out!"),
-             h5("For this purpose data about almost 1000 games has been used
+             h5("For this purpose, data about almost 1000 games has been used
                 and by using clustering techniques as well as similarity
                 calculations, the app allows the user to see similar
                 games to the one that was chosen. The games were selected based
@@ -198,7 +200,9 @@ dashboardPage(
              h5("The bellow section is an in-detail explanation of visualizations
                 presented in this dashboard. The elements will be described consistently
                 with what is presented on the image below:"),
-             h5("Here insert screenshot of the dashboard"),
+             column(width=5,
+                    img(src = "/imgs/Dashboard_screen_about.png", height=400, width=800)
+             ),
              h5("1.A - Text field form which games can be chosen, game can be selected
                 from a list or typed-in manually."),
              h5("1.B - Text field from which game genres can be selected, doing so will
@@ -223,7 +227,7 @@ dashboardPage(
                 sake of clarity, logarithmic scale was applied for the x-axis."),
              h5("5.B - Plot showing the most similar games to the chosen one from the same cluster
                 based on genres, the more genres match, the higher the similarity.
-                In practice similarity in this case is inversly proportional to 
+                In practice similarity, in this case, is inversly proportional to 
                 Hamming distance calculated on genres, with additional safe-guard against infinite
                 similarity in case of 0 distance.
                 For some games all genres for all top 15 most similar games may be the same,
@@ -231,10 +235,23 @@ dashboardPage(
              h5("5.C - Density distribution of Metacritic scores from the similar games to the 
                 one selected, with the currently selected one also marked as a vertical
                 line."),
-             h5("5.D - Bar chart showing the number of games with the given 
-                age requirement for all games vs for the selected cluster."),
-             h5("Here insert image from 'Visualizations' tab"),
-             h5("Describe in detail this tab")
+             h5("5.D - Histogram showing the distribution of game genres
+                for similar games to the selected one, with genres matching
+                the currently chosen game having the green color."),
+             h5("5.E - Bar chart showing the number of games with the given 
+                age requirement for all games vs for the selected cluster.
+                Allows for omitting 0 values by checking a box."),
+             column(width=5,
+                    img(src = "imgs/Dashboard_visualizations.png", height=400, width=800)
+             ),
+             h5("6 - Heatmap showing prevalence of game genres for each cluster
+                with lighter colors meaning more games belonging to this genre being
+                present for the given cluster. Also includes a slider to
+                view a chosen cluster as well as option for animation with
+                all clusters to play-out."),
+             h5("7 - Interactive chord diagram showing the relations between
+                genres present in all of the currently implemented games,
+                independently of the cluster.")
       )
     )
   )
