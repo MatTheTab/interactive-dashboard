@@ -251,7 +251,21 @@ dashboardPage(
                 all clusters to play-out."),
              h5("7 - Interactive chord diagram showing the relations between
                 genres present in all of the currently implemented games,
-                independently of the cluster.")
+                independently of the cluster."),
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             br()
       )
     )
   )
