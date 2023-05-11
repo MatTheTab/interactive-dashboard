@@ -176,7 +176,7 @@ dashboardPage(
              br(),
              h4("Created by:"),
              "Mateusz Tabaszewski 151945", br(),
-             "Barłomiej Pukacki 151942", br(),
+             "Bartłomiej Pukacki 151942", br(),
              h4("Description:"),
              h5("Video games are the biggest modern medium for
                 entertainment, with over 10 000 games releasing yearly,
