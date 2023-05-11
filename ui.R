@@ -201,7 +201,7 @@ dashboardPage(
                 presented in this dashboard. The elements will be described consistently
                 with what is presented on the image below:"),
              column(width=8,
-                    img(src = "/imgs/Dashboard_screen_about.png", height=500, width=800, style = "margin-left: -50px;")
+                    img(src = "imgs/Dashboard_screen_about.png", height=500, width=800, style = "margin-left: -50px;")
              ),
              h5("1.A - Text field form which games can be chosen, game can be selected
                 from a list or typed-in manually."),
