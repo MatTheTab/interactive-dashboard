@@ -1,5 +1,9 @@
 # Game recommendation system
-Live demo: https://gho-ost.shinyapps.io/interactive-dashboard/
+
+This project was originally made in colaboration with Gho-Ost, however it was forked here to allow for viewing as part of my work and to allow me to host the app on my account through the below link. <br>
+<b>Live demo:</b> [Interactive Dashboard](https://matthetab.shinyapps.io/interactive-dashboard/) <br>
+
+<b>Original Repo</b> - collaborated on by MatTheTab and Gho-Ost and hosted by Gho-Ost here: [Gho-Ost's Repo](https://github.com/Gho-Ost/interactive-dashboard) <br>
 
 ## Data:
 https://data.world/craigkelly/steam-game-data
